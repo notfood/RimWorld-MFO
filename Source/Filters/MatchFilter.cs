@@ -35,7 +35,7 @@ namespace Override {
 				throw new ArgumentException (string.Format("'{0}' is not a Def Type", itType));
 			}
 				
-			ParameterExpression it = Expression.Parameter(itType, "");
+			ParameterExpression it = Expression.Parameter(typeof(Verse.Def), "");
 			Expression left = null, right = null;
 
 			foreach(Match match in filter.Matches(expression)) {
@@ -56,7 +56,7 @@ namespace Override {
 								string.Format("ParseHelper can't handle '{0}' for '{1}' Field in '{2}' Type", itField.FieldType, field, itType)
 							);
 						}
-						var tefld = Expression.Field (it, itField);
+						var tefld = Expression.Field (Expression.Convert(it, itType), itField);
 						var teval = Expression.Constant(ParseHelper.FromString (value, itField.FieldType));
 
 						//right = Expression.Call (typeof(System.Object).GetMethod ("Equals", new Type[] { typeof(object), typeof(object) }), tefld, teval);
@@ -76,10 +76,11 @@ namespace Override {
 							left = right;
 						}
 
-						Log.Message (field + " = " + value);
 					}
 				}
 			}
+
+			left = Expression.AndAlso (Expression.TypeIs (it, itType), left);
 
 			if (left != null) {
 				Log.Message ("Override :: Filter is \"" + left.ToString() + "\"");

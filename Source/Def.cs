@@ -35,6 +35,7 @@ namespace Override
 			{ "Linq",    new LinqFilter() },
 			{ "Race",     new RaceFilter() },
 			{ "Trader",   new TraderFilter() },
+			{ "Class",   new ClassFilter() },
 		};
 
 		private static FieldParser DefaultParser = new RimWorldDefaultParser();
